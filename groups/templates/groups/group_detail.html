@@ -1,0 +1,35 @@
+{% extends "groups/group_base.html" %}
+{% block pregroup %}
+
+<h1>{{group.name}}</h1>
+<h2>Total number of members in Group: {{group.members.count}}</h2>
+
+  <div class="content">
+				{% if user in group.members.all %}
+        {# give users the option to leave if they're already in group: #}
+					<a href="{% url 'groups:leave' slug=group.slug %}"
+          class="btn btn-lg btn-fill btn-warning">
+          <span class="glyphicon glyphicon-remove-circle"></span>Leave Group</a>
+				{% else %}
+        {# if they're not in group, give users the option to join! #}
+					<a href="{% url 'groups:join' slug=group.slug %}"
+          class="btn btn-lg btn-fill btn-warning">
+          <span class="glyphicon glyphicon-ok-circle"></span>Join this Group!</a>
+				{% endif %}
+</div>
+
+{% endblock %}
+
+{% block group_content %}
+<div class="col-md-8">
+	{% if group.posts.count == 0 %}
+	<h2>There are no posts in this group yet!</h2>
+	{% else %}
+  {# this next line gives all the posts that are in the group. #}
+		{% for post in group.posts.all %}
+			{% include "posts/_post.html" %}
+      {# the underscore signals to developers that above file is meant to be injected. #}
+		{% endfor %}
+	{% endif %}
+</div>
+{% endblock %}
